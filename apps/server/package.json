@@ -9,8 +9,9 @@
     "lint": "eslint . --max-warnings 0",
     "test-build": "tsc && cp .env.test ./dist/.env",
     "test-start": "npm run test-build && cd dist && NODE_ENV=test node ./server",
-    "test": "jest --no-watchman",
-    "test:watch": "jest --watch"
+    "test": "jest --no-watchman --detectOpenHandles",
+    "test:watch": "jest --no-watchman --detectOpenHandles --watch",
+    "coverage": "jest --collect-coverage --detectOpenHandles --no-watchman"
   },
   "dependencies": {
     "@types/body-parser": "^1.19.5",

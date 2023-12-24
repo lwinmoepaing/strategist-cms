@@ -4,23 +4,29 @@
   "private": true,
   "scripts": {
     "commit": "cz",
-    "build": "turbo build",
     "release": "standard-version -- --release-as ",
     "alpha": "standard-version --prerelease alpha",
+    "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
+    "test": "turbo test",
+    "test-build": "turbo test-build",
+    "test-start": "turbo test-start",
+    "coverage": "turbo coverage",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "prepare": "husky install",
+
+    "build:web": "turbo build --filter web --force",
+    "dev:web": "turbo dev --filter web",
+    "lint:web": "turbo lint --filter web",
+
     "start:server": "cd ./apps/server/dist && node ./server",
     "build:server": "turbo build --filter server --force",
     "dev:server": "turbo dev --filter server",
     "lint:server": "turbo lint --filter server",
     "test:server": "turbo test --filter server",
     "test-start:server": "cd ./apps/server && npm run test-start",
-    "test": "turbo test",
-    "build:web": "turbo build --filter web --force",
-    "dev:web": "turbo dev --filter web",
-    "lint:web": "turbo lint --filter web",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "prepare": "husky install"
+    "coverage:server": "turbo coverage --filter server"
   },
   "devDependencies": {
     "@commitlint/cli": "^18.4.3",

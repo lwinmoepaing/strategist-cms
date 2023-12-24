@@ -6,5 +6,5 @@ module.exports = {
   parserOptions: {
     project: true,
   },
-  ignorePatterns: ["jest.config.js", "**/*.test.ts"],
+  ignorePatterns: ["jest.config.js", "**/*.test.ts", "coverage/"],
 };

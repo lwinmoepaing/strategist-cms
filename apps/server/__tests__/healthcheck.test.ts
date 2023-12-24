@@ -18,12 +18,4 @@ describe("Checking Api's Health" + url, () => {
       message: "OK",
     });
   });
-
-  // describe("Requesting Not exist Page", () => {
-  //   test("[GET] Request: /404", async () => {
-  //     const response = await supertest(url).get("/404");
-  //     expect(response.status).toBe(404);
-  //     expect(response.body).toEqual("404");
-  //   });
-  // });
 });

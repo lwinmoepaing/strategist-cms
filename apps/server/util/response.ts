@@ -1,5 +1,5 @@
 export const successResponse = <T>(
-  statusCode: number = 200,
+  statusCode: number,
   message: string,
   data?: T
 ) => {

@@ -3,6 +3,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "./dist",
+    "types": ["jest", "node"],
     "paths": {
       "./*": ["./*"]
     }
@@ -14,7 +15,8 @@
     "./util/**/*.ts",
     "./lib/**/*.ts",
     "./api/**/*.ts",
+    "./__tests__/**/*.ts",
     "jest.config.js"
   ],
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules", "dist", "coverage"]
 }
