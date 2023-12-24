@@ -2,6 +2,9 @@ import { config } from "dotenv";
 import express, { NextFunction, Request, Response } from "express";
 import { initFileRouter } from "node-file-router";
 import path from "path";
+import helmet from "helmet";
+import cors from "cors";
+import bodyParser from "body-parser";
 import { generalLogger, requestLogger } from "./lib/logger";
 import { successResponse } from "./util/response";
 import { dbConnect } from "./lib/dbConnect";
@@ -21,6 +24,30 @@ const startServer = async () => {
    * =======================
    */
   dbConnect();
+
+  /**
+   * =======================
+   * Security with HTTP headers
+   * =======================
+   * @doc : https://helmetjs.github.io/
+   *
+   */
+  app.use(helmet());
+
+  /**
+   * =======================
+   * For parsing data for body payload
+   * =======================
+   */
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: false }));
+
+  /**
+   * =======================
+   * Cross Origin Resource Sharing
+   * =======================
+   */
+  app.use(cors());
 
   /**
    * =======================
