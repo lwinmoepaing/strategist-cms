@@ -13,7 +13,8 @@
     "./api/**/*.ts",
     "./util/**/*.ts",
     "./lib/**/*.ts",
-    "./api/**/*.ts"
+    "./api/**/*.ts",
+    "jest.config.js"
   ],
   "exclude": ["node_modules", "dist"]
 }

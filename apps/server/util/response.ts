@@ -1,7 +1,7 @@
-export const successResponse = (
+export const successResponse = <T>(
   statusCode: number = 200,
   message: string,
-  data: any = null
+  data?: T
 ) => {
   return {
     statusCode,

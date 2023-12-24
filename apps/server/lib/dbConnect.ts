@@ -3,8 +3,10 @@ import { mongoDbErrorLogger } from "./logger";
 import { config } from "dotenv";
 import path from "path";
 
+const isTesting = process.env.NODE_ENV === "test";
+
 config({
-  path: path.join(__dirname, "../", ".env"),
+  path: path.join(__dirname, "../", isTesting ? ".env.test" : ".env"),
 });
 
 export const dbConnect = async () => {

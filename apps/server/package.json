@@ -3,15 +3,21 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./dist",
+    "start": "node ./dist/server",
     "dev": "nodemon --watch './**/*.ts' --exec 'ts-node' ./server.ts",
     "build": "test -e .env || cp .env.example .env && tsc && cp .env ./dist",
-    "lint": "eslint . --max-warnings 0"
+    "lint": "eslint . --max-warnings 0",
+    "test-build": "tsc && cp .env.test ./dist/.env",
+    "test-start": "npm run test-build && cd dist && NODE_ENV=test node ./server",
+    "test": "jest --no-watchman",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
+    "concurrently": "^8.2.2",
     "dotenv": "^16.3.1",
     "eslint": "^8.53.0",
     "express": "^4.18.2",
+    "jest": "^29.7.0",
     "mongoose": "^8.0.3",
     "node-file-router": "^0.4.0",
     "typescript": "^5.2.2",
@@ -24,10 +30,14 @@
     "@strategist-cms/eslint-config": "workspace:*",
     "@strategist-cms/typescript-config": "workspace:*",
     "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.11",
     "@types/mongoose": "^5.11.97",
     "@types/node": "^20.10.5",
+    "@types/supertest": "^6.0.1",
     "@types/winston": "^2.4.4",
     "nodemon": "^3.0.2",
+    "supertest": "^6.3.3",
+    "ts-jest": "^29.1.1",
     "ts-node": "^10.9.2"
   }
 }

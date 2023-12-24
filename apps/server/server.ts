@@ -48,7 +48,16 @@ const startServer = async () => {
    * =======================
    */
   app.get("/", (req, res) => {
-    return res.json(successResponse(200, "OK"));
+    return res.status(200).json(successResponse(200, "OK"));
+  });
+
+  /**
+   * =======================
+   * Handling 404 pages
+   * =======================
+   */
+  app.get("*", (req, res) => {
+    return res.status(404).json(successResponse(404, "Not Found"));
   });
 
   /**
@@ -59,7 +68,7 @@ const startServer = async () => {
   // eslint-disable-next-line no-unused-vars
   app.use((err: any, req: Request, res: Response, _next: NextFunction) => {
     generalLogger.error(`Error: ${err?.message || ""}`, { stack: err.stack });
-    res.status(500).send(successResponse(500, "Internal Server Error"));
+    res.status(500).json(successResponse(500, "Internal Server Error"));
   });
 
   /**
