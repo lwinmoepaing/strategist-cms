@@ -1,0 +1,3 @@
+{
+  "extends": "@strategist-cms/typescript-config/base.json"
+}

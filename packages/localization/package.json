@@ -1,0 +1,10 @@
+{
+    "name": "@strategist-cms/localization",
+    "version": "0.0.0",
+    "private": false,
+    "scripts": {},
+    "devDependencies": {
+      "typescript": "^5.2.2"
+    }
+  }
+  

@@ -1,0 +1,46 @@
+{
+  "name": "strategist-cms",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "commit": "cz",
+    "build": "turbo build",
+    "release": "standard-version -- --release-as ",
+    "alpha": "standard-version -- --prerelease alpha-",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "start:server": "cd ./apps/server/dist && node ./server",
+    "build:server": "turbo build --filter server --force",
+    "dev:server": "turbo dev --filter server",
+    "lint:server": "turbo lint --filter server",
+    "build:web": "turbo build --filter web --force",
+    "dev:web": "turbo dev --filter web",
+    "lint:web": "turbo lint --filter web",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^18.4.3",
+    "@commitlint/config-conventional": "^18.4.3",
+    "@strategist-cms/eslint-config": "workspace:*",
+    "@strategist-cms/localization": "workspace:*",
+    "@strategist-cms/typescript-config": "workspace:*",
+    "commitizen": "^4.3.0",
+    "cz-conventional-changelog": "^3.3.0",
+    "husky": "^8.0.0",
+    "prettier": "^3.1.0",
+    "turbo": "latest"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "packageManager": "pnpm@8.9.0",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "standard-version": "^9.5.0"
+  }
+}
