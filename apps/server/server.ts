@@ -1,13 +1,14 @@
+import bodyParser from "body-parser";
+import cors from "cors";
 import { config } from "dotenv";
 import express, { NextFunction, Request, Response } from "express";
+import helmet from "helmet";
 import { initFileRouter } from "node-file-router";
 import path from "path";
-import helmet from "helmet";
-import cors from "cors";
-import bodyParser from "body-parser";
+import { dbConnect } from "./lib/dbConnect";
 import { generalLogger, requestLogger } from "./lib/logger";
 import { successResponse } from "./util/response";
-import { dbConnect } from "./lib/dbConnect";
+import swaggerApi from "./lib/swaggerApi";
 
 const startServer = async () => {
   const app = express();
@@ -73,10 +74,26 @@ const startServer = async () => {
    * =======================
    * Health Checking
    * =======================
+   * @openapi
+   * /:
+   *   get:
+   *     tags:
+   *       - Health check
+   *     description: "Response if the app is running"
+   *     responses:
+   *       200:
+   *         description: "App is up and running"
    */
   app.get("/", (req, res) => {
     return res.status(200).json(successResponse(200, "OK"));
   });
+
+  /**
+   * =======================
+   * Swagger API Setup
+   * =======================
+   */
+  await swaggerApi(app);
 
   /**
    * =======================
