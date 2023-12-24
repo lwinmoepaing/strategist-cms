@@ -1,12 +1,12 @@
 {
   "name": "strategist-cms",
-  "version": "0.0.0",
+  "version": "0.0.1-alpha.0",
   "private": true,
   "scripts": {
     "commit": "cz",
     "build": "turbo build",
     "release": "standard-version -- --release-as ",
-    "alpha": "standard-version -- --prerelease alpha-",
+    "alpha": "standard-version --prerelease alpha",
     "dev": "turbo dev",
     "lint": "turbo lint",
     "start:server": "cd ./apps/server/dist && node ./server",
