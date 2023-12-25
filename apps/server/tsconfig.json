@@ -1,15 +1,12 @@
 {
   "extends": "@strategist-cms/typescript-config/backend.json",
   "compilerOptions": {
-    "baseUrl": "./",
     "outDir": "./dist",
     "types": ["jest", "node"],
-    "paths": {
-      "./*": ["./*"]
-    }
   },
   "include": [
     "./server.ts",
+    "./models/**/*.ts",
     "./features/**/*.ts",
     "./api/**/*.ts",
     "./util/**/*.ts",

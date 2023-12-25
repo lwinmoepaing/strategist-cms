@@ -2,11 +2,12 @@ import { Express } from "express";
 import path from "path";
 import swaggerJsdoc, { OAS3Options } from "swagger-jsdoc";
 import swaggerUi, { SwaggerUiOptions } from "swagger-ui-express";
+import generateApi from "./generateApi";
 
 export default async (app: Express) => {
   const swaggerOptions: OAS3Options = {
     definition: {
-      openapi: "3.0.0",
+      openapi: "3.1.0",
       info: {
         title: "Strategist-CMS API Documentation",
         version: "alpha-0.0.1",
@@ -29,7 +30,18 @@ export default async (app: Express) => {
     apis: [path.join(__dirname, "../", "**/*.ts")], // point to your route files
   };
 
-  const swaggerSpec = swaggerJsdoc(swaggerOptions);
+  const swaggerSpec: any = swaggerJsdoc(swaggerOptions);
+
+  const isProduction = process.env.NODE_ENV === "production";
+  if (isProduction) {
+    const swagger = await generateApi();
+    swaggerSpec.paths = { ...swaggerSpec.paths, ...swagger.paths };
+    swaggerSpec.components = {
+      ...swaggerSpec.components,
+      ...swagger.components,
+    };
+  }
+
   const swaggerUiOption: SwaggerUiOptions = {
     explorer: true,
     customCss: `
