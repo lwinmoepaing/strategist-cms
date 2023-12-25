@@ -4,6 +4,7 @@ import {
 } from "@asteasolutions/zod-to-openapi";
 import { z } from "zod";
 import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
+import serverConfig from "../../../../config/server.config";
 
 const { object } = z;
 extendZodWithOpenApi(z);
@@ -48,14 +49,7 @@ export const generateAPI = () => {
   const generator = new OpenApiGeneratorV3(registry.definitions);
 
   return {
-    paths: generator.generateDocument({
-      openapi: "3.0.0",
-      info: {
-        version: "1.0.0",
-        title: "Strategist API",
-        description: "Strategist API",
-      },
-    }).paths,
+    paths: generator.generateDocument(serverConfig.defaultOpenApiOptions).paths,
     components: componenetGen.generateComponents().components,
   };
 };

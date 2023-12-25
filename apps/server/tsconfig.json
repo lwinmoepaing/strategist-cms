@@ -6,6 +6,7 @@
   },
   "include": [
     "./server.ts",
+    "./config/**/*.ts",
     "./models/**/*.ts",
     "./features/**/*.ts",
     "./api/**/*.ts",

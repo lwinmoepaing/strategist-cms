@@ -3,15 +3,12 @@ import path from "path";
 import swaggerJsdoc, { OAS3Options } from "swagger-jsdoc";
 import swaggerUi, { SwaggerUiOptions } from "swagger-ui-express";
 import generateApi from "./generateApi";
+import serverConfig from "../config/server.config";
 
 export default async (app: Express) => {
   const swaggerOptions: OAS3Options = {
     definition: {
-      openapi: "3.1.0",
-      info: {
-        title: "Strategist-CMS API Documentation",
-        version: "alpha-0.0.1",
-      },
+      ...serverConfig.defaultOpenApiOptions,
       components: {
         securitySchemes: {
           bearerAuth: {
