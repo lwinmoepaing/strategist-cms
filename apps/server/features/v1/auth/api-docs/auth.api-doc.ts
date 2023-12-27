@@ -15,16 +15,11 @@ export const UserSchema = object({
   age: z.number().openapi({ example: 42 }),
 }).openapi("User");
 
-export const PowerSchema = object({
-  id: z.string().openapi({ example: "1212121" }),
-  name: z.string().openapi({ example: "John Doe" }),
-  age: z.number().openapi({ example: 42 }),
-}).openapi("Power");
 
 export const generateAPI = () => {
   const registry = new OpenAPIRegistry();
 
-  const componenetGen = new OpenApiGeneratorV3([UserSchema, PowerSchema]);
+  const componenetGen = new OpenApiGeneratorV3([UserSchema ]);
 
   registry.registerPath({
     tags: ["Auth"],

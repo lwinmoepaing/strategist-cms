@@ -18,12 +18,12 @@ async function itrateApiDocs(directory: string) {
       // If it's a directory, recursively process its contents
       await itrateApiDocs(filePath);
     } else if (file.endsWith(".api-doc.ts")) {
-      // If it's a *.validation.ts file, perform your require or other actions
+      // If it's a *.api-doc.ts file, perform your require or other actions
       try {
-        const validationModule = require(filePath);
-        // Do something with the validationModule...]
-        if (validationModule?.generateAPI) {
-          const { components, paths } = validationModule.generateAPI();
+        const swaggerApiDoc = require(filePath);
+        // Do something with the swaggerApiDoc...]
+        if (swaggerApiDoc?.generateAPI) {
+          const { components, paths } = swaggerApiDoc.generateAPI();
           swaggerObjects = {
             components: {
               schemas: {

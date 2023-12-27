@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./dist/server",
-    "dev": "nodemon --watch './**/*.ts' --exec 'ts-node' ./server.ts",
+    "dev": "ts-node-dev --respawn --transpile-only ./server",
     "build": "test -e .env || cp .env.example .env && tsc && cp .env ./dist",
     "lint": "eslint . --max-warnings 0",
     "test-build": "tsc && cp .env.test ./dist/.env",
@@ -24,8 +24,9 @@
     "express": "^4.18.2",
     "helmet": "^7.1.0",
     "mongoose": "^8.0.3",
-    "nanoid": "^5.0.4",
+    "nanoid": "3.3.4",
     "node-file-router": "^0.4.0",
+    "nodemailer": "^6.9.7",
     "swagger-jsdoc": "^6.2.8",
     "swagger-themes": "^1.2.30",
     "swagger-ui-express": "^5.0.0",
@@ -47,6 +48,7 @@
     "@types/jest": "^29.5.11",
     "@types/mongoose": "^5.11.97",
     "@types/node": "^20.10.5",
+    "@types/nodemailer": "^6.4.14",
     "@types/supertest": "^6.0.1",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.6",
@@ -55,6 +57,6 @@
     "nodemon": "^3.0.2",
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.1",
-    "ts-node": "^10.9.2"
+    "ts-node-dev": "^2.0.0"
   }
 }
