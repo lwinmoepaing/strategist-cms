@@ -1,5 +1,8 @@
 /**
- * Auth Validations
+ * ========================
+ * Auth Schema
+ * ========================
+ * Validation Schema with Zod
  */
 
 import { TypeOf, z } from "zod";
@@ -7,6 +10,7 @@ import { TypeOf, z } from "zod";
 import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
 
 const { object, string } = z;
+
 extendZodWithOpenApi(z);
 
 export const createUserSchema = z
