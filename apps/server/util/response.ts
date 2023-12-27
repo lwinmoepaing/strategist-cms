@@ -1,5 +1,6 @@
 import { Response } from "express";
 import { ZodError } from "zod";
+import { StatusCodes } from "http-status-codes";
 
 export const successResponse = <T>(
   statusCode: number,
@@ -30,9 +31,13 @@ export const errorResponse = <T>(
 export const errorHandler = (error: unknown, res: Response) => {
   if (error instanceof ZodError) {
     const message = error instanceof Error ? "Invalid Data" : "Bad Request";
-    return res.status(401).json(errorResponse(401, message, error?.errors));
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json(errorResponse(StatusCodes.BAD_REQUEST, message, error?.errors));
   }
 
   const message = error instanceof Error ? "Sorry" : "Bad Request";
-  return res.status(500).json(errorResponse(500, message, {}));
+  return res
+    .status(StatusCodes.INTERNAL_SERVER_ERROR)
+    .json(errorResponse(StatusCodes.INTERNAL_SERVER_ERROR, message, {}));
 };

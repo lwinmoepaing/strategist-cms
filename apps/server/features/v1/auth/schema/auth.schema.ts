@@ -42,4 +42,13 @@ export const createUserSchema = z
   })
   .openapi("CreateUserSchema");
 
+export const verifyUserSchema = z.object({
+  query: z.object({
+    id: string(),
+    verificationCode: string(),
+  }),
+});
+
 export type CreateUserInput = TypeOf<typeof createUserSchema>["body"];
+
+export type VerifyUserInput = TypeOf<typeof verifyUserSchema>["query"];
