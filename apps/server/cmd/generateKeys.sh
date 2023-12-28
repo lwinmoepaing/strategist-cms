@@ -30,7 +30,7 @@ gradient_text "======================================="
 echo " Start Generating For Access Token Keys"
 gradient_text "======================================="
 # Generate private key and save it to private.pem
-openssl genpkey -algorithm RSA -out private.pem -aes256
+openssl genpkey -algorithm RSA -out private.pem 
 
 # Extract the public key from the private key and save it to public.pem
 openssl rsa -pubout -in private.pem -out public.pem
@@ -42,7 +42,7 @@ echo " Next Generating For Refresh Token Keys"
 gradient_text "======================================="
 
 # Generate private key and save it to private.pem
-openssl genpkey -algorithm RSA -out private-refresh.pem -aes256
+openssl genpkey -algorithm RSA -out private-refresh.pem 
 
 # Extract the public key from the private key and save it to public.pem
 openssl rsa -pubout -in private-refresh.pem -out public-refresh.pem
@@ -58,16 +58,17 @@ envFile=".env"
 envContent=$(cat $envFile)
 
 # Update only the token keys in .env file
-accessTokenPublic=$(awk '/-----BEGIN PUBLIC KEY-----/{flag=1; next} /-----END PUBLIC KEY-----/{flag=0} flag' public.pem | tr -d '\n')
-accessTokenPrivate=$(awk '/-----BEGIN ENCRYPTED PRIVATE KEY-----/{flag=1; next} /-----END ENCRYPTED PRIVATE KEY-----/{flag=0} flag' private.pem | tr -d '\n')
-refreshTokenPublic=$(awk '/-----BEGIN PUBLIC KEY-----/{flag=1; next} /-----END PUBLIC KEY-----/{flag=0} flag' public-refresh.pem | tr -d '\n')
-refreshTokenPrivate=$(awk '/-----BEGIN ENCRYPTED PRIVATE KEY-----/{flag=1; next} /-----END ENCRYPTED PRIVATE KEY-----/{flag=0} flag' private-refresh.pem | tr -d '\n')
+accessTokenPublic=$(base64 < public.pem | tr -d '\n')
+accessTokenPrivate=$(base64 < private.pem | tr -d '\n')
+refreshTokenPublic=$(base64 < public-refresh.pem | tr -d '\n')
+refreshTokenPrivate=$(base64 < private-refresh.pem | tr -d '\n')
 
 updatedEnvContent=$(echo "$envContent" | \
   sed "s|ACCESS_TOKEN_PUBLIC=.*|ACCESS_TOKEN_PUBLIC=\"$accessTokenPublic\"|" | \
   sed "s|ACCESS_TOKEN_PRIVATE=.*|ACCESS_TOKEN_PRIVATE=\"$accessTokenPrivate\"|" | \
   sed "s|REFRESH_TOKEN_PUBLIC=.*|REFRESH_TOKEN_PUBLIC=\"$refreshTokenPublic\"|" | \
   sed "s|REFRESH_TOKEN_PRIVATE=.*|REFRESH_TOKEN_PRIVATE=\"$refreshTokenPrivate\"|")
+
 
 # Write the changes back to .env file
 echo "$updatedEnvContent" > $envFile
@@ -78,7 +79,7 @@ echo " Token keys updated successfully... "
 gradient_text "======================================="
 
 # Clean up temporary key files
-rm private.pem public.pem private-refresh.pem public-refresh.pem
+# rm private.pem public.pem private-refresh.pem public-refresh.pem
 echo " ... "
 gradient_text "======================================="
 echo " Finished: Removing... Key files "

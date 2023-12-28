@@ -11,6 +11,7 @@ import {
 } from "../../../../util/response";
 import {
   CreateUserInput,
+  CreateUserSessionInput,
   ForgotPasswordInput,
   ResetPasswordInput,
   VerifyUserInput,
@@ -19,6 +20,8 @@ import {
   createUser,
   findUserByEmail,
   findUserById,
+  signAccessToken,
+  signRefreshToken,
 } from "../services/auth.services";
 import { sendEmail } from "../../mail/services/mail.services";
 import serverConfig from "../../../../config/server.config";
@@ -161,6 +164,54 @@ export const resetPasswordHandler = async (
       .json(
         successResponse(StatusCodes.OK, "Successfully updated user password")
       );
+  } catch (err) {
+    errorHandler(err, res);
+  }
+};
+
+export const createUserSessionHandler = async (
+  req: Request<{}, {}, CreateUserSessionInput>,
+  res: Response
+) => {
+  try {
+    const { email, password } = req.body;
+    const message = "Invalid email or password";
+    const user = await findUserByEmail(email);
+
+    if (!user) {
+      return res
+        .status(StatusCodes.UNAUTHORIZED)
+        .json(errorResponse(StatusCodes.UNAUTHORIZED, message));
+    }
+
+    if (user.verified !== true) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json(
+          errorResponse(StatusCodes.BAD_REQUEST, "Please verify your email")
+        );
+    }
+
+    const isValid = await user.validatePassword(password);
+    if (!isValid) {
+      return res
+        .status(StatusCodes.UNAUTHORIZED)
+        .json(errorResponse(StatusCodes.UNAUTHORIZED, message));
+    }
+
+    // Sign Access Token
+    const accessToken = signAccessToken(user);
+
+    // Sign Refresh Token
+    const refreshToken = signRefreshToken({ userId: user._id.toString() });
+
+    // Send Tokens
+    return res.status(StatusCodes.OK).json(
+      successResponse(StatusCodes.OK, "Successfully signed ", {
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      })
+    );
   } catch (err) {
     errorHandler(err, res);
   }

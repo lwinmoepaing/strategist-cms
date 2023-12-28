@@ -58,6 +58,7 @@ export class User {
       return await argon2.verify(this.password, candidatePassword);
     } catch (err: any) {
       generalLogger.error(`Error: ${err?.message || ""}`, { stack: err.stack });
+      return false;
     }
   }
 }

@@ -2,8 +2,10 @@ import jwt from "jsonwebtoken";
 import serverConfig from "../../../../config/server.config";
 
 export type TJwtPrivateTokenType = "accessTokenPrivate" | "refreshTokenPrivate";
+
 export type TJwtPublicTokenType = "accessTokenPublic" | "refreshTokenPublic";
-export const jwtSign = (
+
+export const singJWT = (
   data: Object,
   key: TJwtPrivateTokenType,
   options?: jwt.SignOptions

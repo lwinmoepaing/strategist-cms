@@ -75,6 +75,17 @@ export const resetPasswordSchema = z.object({
   }),
 });
 
+export const createUserSessionSchema = z.object({
+  body: z.object({
+    email: string({
+      required_error: "Email is required",
+    }).email("Not a valid email address"),
+    password: string({
+      required_error: "Password is required",
+    }).min(6, "Password must be at least 6 characters"),
+  }),
+});
+
 export type CreateUserInput = TypeOf<typeof createUserSchema>["body"];
 
 export type VerifyUserInput = TypeOf<typeof verifyUserSchema>["query"];
@@ -82,3 +93,7 @@ export type VerifyUserInput = TypeOf<typeof verifyUserSchema>["query"];
 export type ForgotPasswordInput = TypeOf<typeof forgetPasswordSchema>["body"];
 
 export type ResetPasswordInput = TypeOf<typeof resetPasswordSchema>;
+
+export type CreateUserSessionInput = TypeOf<
+  typeof createUserSessionSchema
+>["body"];
