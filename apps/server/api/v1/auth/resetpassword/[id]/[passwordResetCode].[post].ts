@@ -16,10 +16,9 @@ export default async function UserForgotPassword(
   routerParam: IRouterParam
 ) {
   try {
-    const modReq = req;
-    modReq.params.id = routerParam.id;
-    modReq.params.passwordResetCode = routerParam.passwordResetCode;
-    await validateResource(resetPasswordSchema, modReq);
+    req.params.id = routerParam.id;
+    req.params.passwordResetCode = routerParam.passwordResetCode;
+    await validateResource(resetPasswordSchema, req);
     await resetPasswordHandler(req, res, routerParam);
   } catch (err) {
     errorHandler(err, res);

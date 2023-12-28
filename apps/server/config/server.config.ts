@@ -16,6 +16,14 @@ const serverConfig = {
     port: process.env.EMAIL_PORT ? parseInt(process.env.EMAIL_PORT) : 465,
     secure: process.env.EMAIL_SECURE === "true",
   },
+
+  // Access Token Key
+  token: {
+    accessTokenPublic: process.env.ACCESS_TOKEN_PUBLIC || "",
+    accessTokenPrivate: process.env.ACCESS_TOKEN_PRIVATE || "",
+    refreshTokenPublic: process.env.REFRESH_TOKEN_PUBLIC || "",
+    refreshTokenPrivate: process.env.REFRESH_TOKEN_PRIVATE || "",
+  },
 } as const;
 
 export default serverConfig;

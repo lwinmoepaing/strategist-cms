@@ -25,6 +25,7 @@
     "coverage": "turbo coverage",
     "coverage:server": "turbo coverage --filter server",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "generate:key": "cd apps/server && npm run generate:key",
     "prepare": "husky install"
   },
   "devDependencies": {
