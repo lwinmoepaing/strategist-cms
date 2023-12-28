@@ -57,8 +57,28 @@ export const forgetPasswordSchema = z.object({
   }),
 });
 
+export const resetPasswordSchema = z.object({
+  params: object({
+    id: string(),
+    passwordResetCode: string(),
+  }),
+  body: object({
+    password: string({
+      required_error: "Password is required",
+    }).min(6, "Password must be at least 6 characters"),
+    passwordConfirmation: string({
+      required_error: "Password Confirmation is required",
+    }),
+  }).refine((data) => data.password === data.passwordConfirmation, {
+    message: "Password do not match",
+    path: ["passwordConfirmation"],
+  }),
+});
+
 export type CreateUserInput = TypeOf<typeof createUserSchema>["body"];
 
 export type VerifyUserInput = TypeOf<typeof verifyUserSchema>["query"];
 
 export type ForgotPasswordInput = TypeOf<typeof forgetPasswordSchema>["body"];
+
+export type ResetPasswordInput = TypeOf<typeof resetPasswordSchema>;

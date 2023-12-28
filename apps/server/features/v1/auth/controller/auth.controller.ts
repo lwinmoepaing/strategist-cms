@@ -4,10 +4,15 @@
 import { StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
 import { nanoid } from "nanoid";
-import { errorResponse, successResponse } from "../../../../util/response";
+import {
+  errorHandler,
+  errorResponse,
+  successResponse,
+} from "../../../../util/response";
 import {
   CreateUserInput,
   ForgotPasswordInput,
+  ResetPasswordInput,
   VerifyUserInput,
 } from "../schema/auth.schema";
 import {
@@ -37,22 +42,8 @@ export const createUserHandler = async (
     res
       .status(StatusCodes.OK)
       .json(successResponse(StatusCodes.OK, "Successfully Created", newUser));
-  } catch (error: any) {
-    if (error.code === 11000 || error.code === 11001) {
-      return res
-        .status(StatusCodes.CONFLICT)
-        .json(errorResponse(StatusCodes.CONFLICT, "Already account exists"));
-    }
-
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json(
-        errorResponse(
-          StatusCodes.INTERNAL_SERVER_ERROR,
-          "Something went wrong",
-          null
-        )
-      );
+  } catch (err) {
+    errorHandler(err, res);
   }
 };
 
@@ -87,16 +78,8 @@ export const verifyUserHandler = async (
     res
       .status(StatusCodes.BAD_REQUEST)
       .json(errorResponse(StatusCodes.BAD_REQUEST, "Could not verify user"));
-  } catch (error: any) {
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json(
-        errorResponse(
-          StatusCodes.INTERNAL_SERVER_ERROR,
-          "Something went wrong",
-          null
-        )
-      );
+  } catch (err) {
+    errorHandler(err, res);
   }
 };
 
@@ -138,15 +121,47 @@ export const forgerPasswordHandler = async (
     generalLogger.debug(`Password reset sent to ${email}`);
 
     res.status(StatusCodes.OK).json(successResponse(StatusCodes.OK, message));
-  } catch (error: any) {
+  } catch (err) {
+    errorHandler(err, res);
+  }
+};
+
+export const resetPasswordHandler = async (
+  req: Request<{}, {}, ResetPasswordInput["body"]>,
+  res: Response,
+  routeParam: ResetPasswordInput["params"]
+) => {
+  try {
+    const { id, passwordResetCode } = routeParam;
+    const { password } = req.body;
+
+    const user = await findUserById(id);
+
+    if (
+      !user ||
+      !user.passwordResetCode ||
+      user.passwordResetCode !== passwordResetCode
+    ) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json(
+          errorResponse(
+            StatusCodes.BAD_REQUEST,
+            "Could not reset user password"
+          )
+        );
+    }
+
+    user.passwordResetCode = null;
+    user.password = password;
+
+    await user.save();
     res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .status(StatusCodes.OK)
       .json(
-        errorResponse(
-          StatusCodes.INTERNAL_SERVER_ERROR,
-          "Something went wrong",
-          null
-        )
+        successResponse(StatusCodes.OK, "Successfully updated user password")
       );
+  } catch (err) {
+    errorHandler(err, res);
   }
 };

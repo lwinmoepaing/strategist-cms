@@ -14,9 +14,10 @@ export const validateResource = async <T extends AnyZodObject>(
   schema: T,
   req: Request
 ) => {
-  await schema.parseAsync({
+  const parseData = {
     body: req.body,
     query: req.query,
     params: req.params,
-  });
+  };
+  await schema.parseAsync(parseData);
 };
