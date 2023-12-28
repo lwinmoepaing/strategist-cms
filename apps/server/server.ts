@@ -6,123 +6,131 @@ import helmet from "helmet";
 import { initFileRouter } from "node-file-router";
 import path from "path";
 import { dbConnect } from "./lib/dbConnect";
+import { deserializeUser } from "./lib/deserializeUser";
 import { generalLogger, requestLogger } from "./lib/logger";
-import { successResponse } from "./util/response";
 import swaggerApi from "./lib/swaggerApi";
+import { successResponse } from "./util/response";
 
 const startServer = async () => {
-  const app = express();
-  // Dotenv configuration
-  config({
-    path: path.join(__dirname, ".env"),
-  });
+	const app = express();
+	// Dotenv configuration
+	config({
+		path: path.join(__dirname, ".env"),
+	});
 
-  const port = process.env.SERVER_PORT || 3000;
+	const port = process.env.SERVER_PORT || 3000;
 
-  /**
-   * =======================
-   * Connect Database
-   * =======================
-   */
-  dbConnect();
+	/**
+	 * =======================
+	 * Connect Database
+	 * =======================
+	 */
+	dbConnect();
 
-  /**
-   * =======================
-   * Security with HTTP headers
-   * =======================
-   * @doc : https://helmetjs.github.io/
-   *
-   */
-  app.use(helmet());
+	/**
+	 * =======================
+	 * Security with HTTP headers
+	 * =======================
+	 * @doc : https://helmetjs.github.io/
+	 *
+	 */
+	app.use(helmet());
 
-  /**
-   * =======================
-   * For parsing data for body payload
-   * =======================
-   */
-  app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: false }));
+	/**
+	 * =======================
+	 * For parsing data for body payload
+	 * =======================
+	 */
+	app.use(bodyParser.json());
+	app.use(bodyParser.urlencoded({ extended: false }));
 
-  /**
-   * =======================
-   * Cross Origin Resource Sharing
-   * =======================
-   */
-  app.use(cors());
+	/**
+	 * =======================
+	 * Cross Origin Resource Sharing
+	 * =======================
+	 */
+	app.use(cors());
 
-  /**
-   * =======================
-   * Every Request Logging
-   * =======================
-   */
-  app.use((req, res, next) => {
-    requestLogger.info(`Incoming Request: ${req.method} ${req.url}`);
-    next();
-  });
+	/**
+	 * =======================
+	 * Every Request Logging
+	 * =======================
+	 */
+	app.use((req, res, next) => {
+		requestLogger.info(`Incoming Request: ${req.method} ${req.url}`);
+		next();
+	});
 
-  /**
-   * =======================
-   * File Based Routes Config
-   * =======================
-   */
-  const fileRouter = await initFileRouter({
-    baseDir: `./api`,
-  });
-  app.use("/api", fileRouter);
+	/**
+	 * =======================
+	 * Deserialization User
+	 * =======================
+	 */
+	app.use(deserializeUser);
 
-  /**
-   * =======================
-   * Health Checking
-   * =======================
-   * @openapi
-   * /:
-   *   get:
-   *     tags:
-   *       - Health check
-   *     description: "Response if the app is running"
-   *     responses:
-   *       200:
-   *         description: "App is up and running"
-   */
-  app.get("/", (req, res) => {
-    return res.status(200).json(successResponse(200, "OK"));
-  });
+	/**
+	 * =======================
+	 * File Based Routes Config
+	 * =======================
+	 */
+	const fileRouter = await initFileRouter({
+		baseDir: `./api`,
+	});
+	app.use("/api", fileRouter);
 
-  /**
-   * =======================
-   * Swagger API Setup
-   * =======================
-   */
-  await swaggerApi(app);
+	/**
+	 * =======================
+	 * Health Checking
+	 * =======================
+	 * @openapi
+	 * /:
+	 *   get:
+	 *     tags:
+	 *       - Health check
+	 *     description: "Response if the app is running"
+	 *     responses:
+	 *       200:
+	 *         description: "App is up and running"
+	 */
+	app.get("/", (req, res) => {
+		return res.status(200).json(successResponse(200, "OK"));
+	});
 
-  /**
-   * =======================
-   * Handling 404 pages
-   * =======================
-   */
-  app.get("*", (req, res) => {
-    return res.status(404).json(successResponse(404, "Not Found"));
-  });
+	/**
+	 * =======================
+	 * Swagger API Setup
+	 * =======================
+	 */
+	await swaggerApi(app);
 
-  /**
-   * =======================
-   * Log errors and send an error responseg
-   * =======================
-   */
-  // eslint-disable-next-line no-unused-vars
-  app.use((err: any, req: Request, res: Response, _next: NextFunction) => {
-    generalLogger.error(`Error: ${err?.message || ""}`, { stack: err.stack });
-    res.status(500).json(successResponse(500, "Internal Server Error"));
-  });
+	/**
+	 * =======================
+	 * Handling 404 pages
+	 * =======================
+	 */
+	app.get("*", (req, res) => {
+		return res.status(404).json(successResponse(404, "Not Found"));
+	});
 
-  /**
-   * =======================
-   * Listening
-   * =======================
-   */
-  app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
-  });
+	/**
+	 * =======================
+	 * Log errors and send an error responseg
+	 * =======================
+	 */
+	// eslint-disable-next-line no-unused-vars
+	app.use((err: any, req: Request, res: Response, _next: NextFunction) => {
+		generalLogger.error(`Error: ${err?.message || ""}`, { stack: err.stack });
+		res.status(500).json(successResponse(500, "Internal Server Error"));
+	});
+
+	/**
+	 * =======================
+	 * Listening
+	 * =======================
+	 */
+	app.listen(port, () => {
+		console.log(`Server is running at http://localhost:${port}`);
+	});
 };
 
 startServer();
