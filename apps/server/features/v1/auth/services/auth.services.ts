@@ -12,3 +12,7 @@ export const createUser = (input: CreateUserInput) => {
 export const findUserById = (userId: string) => {
   return UserModel.findById(userId);
 };
+
+export const findUserByEmail = (email: string) => {
+  return UserModel.findOne({ email });
+};

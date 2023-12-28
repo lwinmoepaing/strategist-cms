@@ -49,6 +49,16 @@ export const verifyUserSchema = z.object({
   }),
 });
 
+export const forgetPasswordSchema = z.object({
+  body: z.object({
+    email: string({
+      required_error: "Email is required",
+    }).email("Not a valid email address"),
+  }),
+});
+
 export type CreateUserInput = TypeOf<typeof createUserSchema>["body"];
 
 export type VerifyUserInput = TypeOf<typeof verifyUserSchema>["query"];
+
+export type ForgotPasswordInput = TypeOf<typeof forgetPasswordSchema>["body"];

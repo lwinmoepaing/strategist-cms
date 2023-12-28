@@ -5,8 +5,9 @@ import {
   prop,
   pre,
   DocumentType,
+  index,
 } from "@typegoose/typegoose";
-import { nanoid } from 'nanoid'
+import { nanoid } from "nanoid";
 import argon2 from "argon2";
 import { generalLogger } from "../../lib/logger";
 
@@ -18,6 +19,9 @@ import { generalLogger } from "../../lib/logger";
   const hash = await argon2.hash(this.password);
   this.password = hash;
   return;
+})
+@index({
+  email: 1,
 })
 @modelOptions({
   schemaOptions: {
