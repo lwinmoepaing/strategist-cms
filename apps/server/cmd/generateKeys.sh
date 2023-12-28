@@ -30,7 +30,7 @@ gradient_text "======================================="
 echo " Start Generating For Access Token Keys"
 gradient_text "======================================="
 # Generate private key and save it to private.pem
-openssl genpkey -algorithm RSA -out private.pem 
+openssl genpkey -algorithm RSA -out private.pem
 
 # Extract the public key from the private key and save it to public.pem
 openssl rsa -pubout -in private.pem -out public.pem
@@ -42,7 +42,7 @@ echo " Next Generating For Refresh Token Keys"
 gradient_text "======================================="
 
 # Generate private key and save it to private.pem
-openssl genpkey -algorithm RSA -out private-refresh.pem 
+openssl genpkey -algorithm RSA -out private-refresh.pem
 
 # Extract the public key from the private key and save it to public.pem
 openssl rsa -pubout -in private-refresh.pem -out public-refresh.pem
@@ -79,7 +79,7 @@ echo " Token keys updated successfully... "
 gradient_text "======================================="
 
 # Clean up temporary key files
-# rm private.pem public.pem private-refresh.pem public-refresh.pem
+rm private.pem public.pem private-refresh.pem public-refresh.pem
 echo " ... "
 gradient_text "======================================="
 echo " Finished: Removing... Key files "

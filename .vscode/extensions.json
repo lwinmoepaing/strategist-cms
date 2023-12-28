@@ -1,9 +1,8 @@
 {
     "recommendations": [
-        "adisreyaj.swagger-snippets",
-        "arjun.swagger-viewer",
         "dbaeumer.vscode-eslint",
         "ms-vscode.vscode-typescript-next",
-        "wix.vscode-import-cost"
+        "wix.vscode-import-cost",
+        "editorconfig.editorconfig"
     ]
 }
