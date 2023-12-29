@@ -1,6 +1,5 @@
 import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { Error as MongooseError } from "mongoose";
 import { ZodError } from "zod";
 import { TokenAccessError } from "../features/v1/auth/middleware/auth.middleware";
 import { errorLogger } from "../lib/logger";
@@ -46,15 +45,18 @@ export const errorHandler = (error: unknown, res: Response) => {
     }
   }
 
-  if (error instanceof MongooseError.OverwriteModelError) {
-    if (error.name === "OverwriteModelError") {
-      return errorResponse(res, StatusCodes.CONFLICT, "Already account exists");
-    }
-  }
-
   if (error instanceof ZodError) {
     const message = error instanceof Error ? "Invalid Data" : "Bad Request";
     return errorResponse(res, StatusCodes.BAD_REQUEST, message, error?.errors);
+  }
+
+  const mError = error as any;
+  if (mError?.name === "MongoServerError" && mError?.code === 11000) {
+    return errorResponse(
+      res,
+      StatusCodes.CONFLICT,
+      "Already an account exists",
+    );
   }
 
   const message =

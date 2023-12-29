@@ -5,9 +5,12 @@ import express, { NextFunction, Request, Response } from "express";
 import helmet from "helmet";
 import { initFileRouter } from "node-file-router";
 import path from "path";
+import responseTime from "response-time";
+import serverConfig from "./config/server.config";
 import { dbConnect } from "./lib/dbConnect";
 import { deserializeUser } from "./lib/deserializeUser";
 import { errorLogger, requestLogger } from "./lib/logger";
+import startMetricServer, { restResponseTimeHistogram } from "./lib/metrics";
 import swaggerApi from "./lib/swaggerApi";
 import { successResponse } from "./util/response";
 
@@ -18,7 +21,7 @@ const startServer = async () => {
     path: path.join(__dirname, ".env"),
   });
 
-  const port = process.env.SERVER_PORT || 3000;
+  const { serverPort: port, isMetricsStart } = serverConfig.config;
 
   /**
    * =======================
@@ -67,6 +70,28 @@ const startServer = async () => {
    * =======================
    */
   app.use(deserializeUser);
+
+  /**
+   * =========================
+   * Metrics For Response Time
+   * =========================
+   */
+  if (isMetricsStart) {
+    app.use(
+      responseTime((req: Request, res: Response, time: number) => {
+        if (req?.route?.path) {
+          restResponseTimeHistogram.observe(
+            {
+              method: req.method,
+              route: req.route.path,
+              status_code: res.statusCode,
+            },
+            time * 1000,
+          );
+        }
+      }),
+    );
+  }
 
   /**
    * =======================
@@ -130,6 +155,10 @@ const startServer = async () => {
    */
   app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
+
+    if (isMetricsStart) {
+      startMetricServer();
+    }
   });
 };
 

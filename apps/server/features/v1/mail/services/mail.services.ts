@@ -38,7 +38,6 @@ export const sendEmail = async (payload: SendMailOptions) => {
       },
     });
 
-    console.log("serverConfig.emailOptions", serverConfig.emailOptions);
     const info = await transporter.sendMail(payload);
     const messageId = info.messageId;
     console.log("Message Id: " + messageId);

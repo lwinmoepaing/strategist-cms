@@ -49,14 +49,14 @@ export default async (app: Express) => {
         margin-bottom: 20px;
       }
 
-      .swagger-ui .scheme-container { 
-        margin-left: 40px; 
-        margin-right: 40px; 
+      .swagger-ui .scheme-container {
+        margin-left: 40px;
+        margin-right: 40px;
         border-radius: 10px
       }
       .swagger-ui .wrapper {
-        padding-left: 40px; 
-        padding-right: 40px; 
+        padding-left: 40px;
+        padding-right: 40px;
       }
 
       .swagger-ui .info .title span {

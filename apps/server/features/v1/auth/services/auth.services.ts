@@ -1,26 +1,36 @@
 /**
  * Auth Services
  */
-import { omit } from "lodash";
 import { DocumentType } from "@typegoose/typegoose";
+import { omit } from "lodash";
+import { metricDbHelper } from "../../../../lib/metrics";
+import UserSessionModel from "../../../../models/Users/user-session.model";
 import UserModel, {
   User,
   privateFields,
 } from "../../../../models/Users/user.model";
 import { CreateUserInput } from "../schema/auth.schema";
 import { signJWT } from "./jwt.services";
-import UserSessionModel from "../../../../models/Users/user-session.model";
 
-export const createUser = (input: CreateUserInput) => {
-  return UserModel.create(input);
+export const createUser = async (input: CreateUserInput) => {
+  const userCreateFn = () => {
+    return UserModel.create(input);
+  };
+  return metricDbHelper(userCreateFn, "createUser");
 };
 
 export const findUserById = (userId: string) => {
-  return UserModel.findById(userId);
+  const findByIdFn = () => {
+    return UserModel.findById(userId);
+  };
+  return metricDbHelper(findByIdFn, "findUserById");
 };
 
 export const findUserByEmail = (email: string) => {
-  return UserModel.findOne({ email });
+  const findUserByEmailFn = () => {
+    return UserModel.findOne({ email });
+  };
+  return metricDbHelper(findUserByEmailFn, "findUserByEmail");
 };
 
 export const signAccessToken = (user: DocumentType<User>) => {
@@ -39,10 +49,16 @@ export const signRefreshToken = async ({ userId }: { userId: string }) => {
   return refreshToken;
 };
 
-export const createSession = ({ userId }: { userId: string }) => {
-  return UserSessionModel.create({ user: userId });
+export const createSession = async ({ userId }: { userId: string }) => {
+  const createSessionFn = () => {
+    return UserSessionModel.create({ user: userId });
+  };
+  return metricDbHelper(createSessionFn, "createSession");
 };
 
 export const findSessionById = (id: string) => {
-  return UserSessionModel.findById(id);
+  const findSessionByIdFn = () => {
+    return UserSessionModel.findById(id);
+  };
+  return metricDbHelper(findSessionByIdFn, "findSessionById");
 };

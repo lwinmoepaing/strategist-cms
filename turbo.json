@@ -2,6 +2,8 @@
   "$schema": "https://turbo.build/schema.json",
   "globalEnv": [
     "SERVER_PORT",
+    "METRICS_SERVER_PORT",
+    "METRICS_START",
     "DB_URL",
     "NODE_ENV",
     "EMAIL_HOST",

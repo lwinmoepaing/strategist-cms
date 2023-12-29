@@ -1,4 +1,16 @@
+import { config } from "dotenv";
+import path from "path";
+config({
+  path: path.join(__dirname, "../", ".env"),
+});
+
 const serverConfig = {
+  config: {
+    serverPort: process.env.SERVER_PORT || 3000,
+    isMetricsStart: process.env.METRICS_START === "true",
+    metricPort: process.env.METRICS_SERVER_PORT || 3000,
+  },
+
   // For Open Api Documentation
   defaultOpenApiOptions: {
     openapi: "3.1.0",
