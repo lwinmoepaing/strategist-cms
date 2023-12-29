@@ -3,31 +3,34 @@ import { ZodError } from "zod";
 import { StatusCodes } from "http-status-codes";
 import { generalLogger } from "../lib/logger";
 import { Error as MongooseError } from "mongoose";
+import { TokenAccessError } from "../features/v1/auth/middleware/auth.middleware";
 
 export const successResponse = <T>(
+  res: Response,
   statusCode: number,
   message: string,
-  data?: T
+  data?: T,
 ) => {
-  return {
+  return res.status(statusCode).json({
     statusCode,
     message,
     data,
-  };
+  });
 };
 
 export const errorResponse = <T>(
+  res: Response,
   statusCode: number,
   message: string,
-  data?: T
+  data?: T,
 ) => {
   const errorCode: number = 1;
-  return {
+  return res.status(StatusCodes.UNAUTHORIZED).json({
     errorCode: errorCode,
     statusCode,
     message,
     data,
-  };
+  });
 };
 
 export const errorHandler = (error: unknown, res: Response) => {
@@ -37,25 +40,25 @@ export const errorHandler = (error: unknown, res: Response) => {
     });
   }
 
+  if (error instanceof TokenAccessError) {
+    if (error.code === 401) {
+      return errorResponse(res, StatusCodes.UNAUTHORIZED, error.message);
+    }
+  }
+
   if (error instanceof MongooseError.OverwriteModelError) {
     if (error.name === "OverwriteModelError") {
-      return res
-        .status(StatusCodes.CONFLICT)
-        .json(errorResponse(StatusCodes.CONFLICT, "Already account exists"));
+      return errorResponse(res, StatusCodes.CONFLICT, "Already account exists");
     }
   }
 
   if (error instanceof ZodError) {
     const message = error instanceof Error ? "Invalid Data" : "Bad Request";
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .json(errorResponse(StatusCodes.BAD_REQUEST, message, error?.errors));
+    return errorResponse(res, StatusCodes.BAD_REQUEST, message, error?.errors);
   }
 
   const message =
     error instanceof Error ? "Something went wrong" : "Bad Request";
-    
-  return res
-    .status(StatusCodes.INTERNAL_SERVER_ERROR)
-    .json(errorResponse(StatusCodes.INTERNAL_SERVER_ERROR, message, {}));
+
+  return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, message, {});
 };

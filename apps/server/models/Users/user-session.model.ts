@@ -1,9 +1,6 @@
-import { Ref, getModelForClass, index, prop } from "@typegoose/typegoose";
+import { Ref, getModelForClass, prop } from "@typegoose/typegoose";
 import { User } from "./user.model";
 
-@index({
-  email: 1,
-})
 export class UserSession {
   @prop({ ref: () => User })
   user: Ref<User>;

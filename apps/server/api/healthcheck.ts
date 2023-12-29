@@ -3,6 +3,6 @@ import { successResponse } from "../util/response";
 
 export default {
   get: (req: Request, res: Response) => {
-    return res.status(200).json(successResponse(200, "OK"));
+    return successResponse(res, 200, "OK");
   },
 };
