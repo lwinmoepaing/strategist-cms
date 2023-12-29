@@ -7,7 +7,7 @@ import {
 import { validateResource } from "../../../lib/validateResource";
 import { errorHandler } from "../../../util/response";
 
-export default async function UserVerify(
+export default async function UserSignIn(
   req: Request<CreateUserSessionInput>,
   res: Response
 ) {

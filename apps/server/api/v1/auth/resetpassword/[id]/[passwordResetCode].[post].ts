@@ -9,7 +9,7 @@ interface IRouterParam {
   passwordResetCode: string;
 }
 
-export default async function UserForgotPassword(
+export default async function UserResetPassword(
   req: Request,
   res: Response,
   next: NextFunction,

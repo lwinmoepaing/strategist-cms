@@ -1,11 +1,11 @@
 /**
  * Auth Services
  */
-
+import {omit} from 'lodash';
 import { DocumentType } from "@typegoose/typegoose";
-import UserModel, { User } from "../../../../models/Users/user.model";
+import UserModel, { User, privateFields } from "../../../../models/Users/user.model";
 import { CreateUserInput } from "../schema/auth.schema";
-import { singJWT } from "./jwt.services";
+import { signJWT } from "./jwt.services";
 import UserSessionModel from "../../../../models/Users/user-session.model";
 
 export const createUser = (input: CreateUserInput) => {
@@ -21,14 +21,14 @@ export const findUserByEmail = (email: string) => {
 };
 
 export const signAccessToken = (user: DocumentType<User>) => {
-  const data = user.toJSON();
-  const accessToken = singJWT(data, "accessTokenPrivate");
+  const data = omit(user.toJSON(), privateFields);
+  const accessToken = signJWT(data, "accessTokenPrivate");
   return accessToken;
 };
 
 export const signRefreshToken = async ({ userId }: { userId: string }) => {
   const session = await createSession({ userId: userId });
-  const refreshToken = singJWT({ session: session._id }, "refreshTokenPrivate");
+  const refreshToken = signJWT({ session: session._id }, "refreshTokenPrivate");
   return refreshToken;
 };
 

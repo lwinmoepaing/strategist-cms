@@ -10,6 +10,135 @@
 			"name": "Auth",
 			"item": [
 				{
+					"name": "Get Info Myself",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_FULL_ROUTE}}/auth/me",
+							"host": [
+								"{{API_FULL_ROUTE}}"
+							],
+							"path": [
+								"auth",
+								"me"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Info Myself",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_FULL_ROUTE}}/auth/me",
+									"host": [
+										"{{API_FULL_ROUTE}}"
+									],
+									"path": [
+										"auth",
+										"me"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Security-Policy",
+									"value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Resource-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Origin-Agent-Cluster",
+									"value": "?1"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "no-referrer"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=15552000; includeSubDomains"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-DNS-Prefetch-Control",
+									"value": "off"
+								},
+								{
+									"key": "X-Download-Options",
+									"value": "noopen"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "SAMEORIGIN"
+								},
+								{
+									"key": "X-Permitted-Cross-Domain-Policies",
+									"value": "none"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "462"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1ce-FruOf3Rve5a+cxvT3k09hTXo+DI\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 28 Dec 2023 19:27:05 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"message\": \"Get User Info\",\n    \"data\": {\n        \"_id\": \"658c5dcbe60133d58072ab1c\",\n        \"email\": \"lwinmoepaing.dev@gmail.com\",\n        \"firstName\": \"LwinMoe\",\n        \"lastName\": \"Paing\",\n        \"password\": \"$argon2id$v=19$m=65536,t=3,p=4$fyf23C03S27VL3Fm6CSCmw$n8v7CeqYWfjPmlwxOvyJm/URYArX7PUIquY1H3Levbw\",\n        \"verificationCode\": \"Wp8RIlHrfaHmEvVIhs5mf\",\n        \"createdAt\": \"2023-12-27T17:24:27.747Z\",\n        \"updatedAt\": \"2023-12-28T05:02:22.000Z\",\n        \"__v\": 0,\n        \"verified\": true,\n        \"passwordResetCode\": null,\n        \"iat\": 1703791516\n    }\n}"
+						}
+					]
+				},
+				{
 					"name": "Register User",
 					"request": {
 						"method": "POST",

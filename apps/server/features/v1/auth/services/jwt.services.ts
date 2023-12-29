@@ -5,7 +5,7 @@ export type TJwtPrivateTokenType = "accessTokenPrivate" | "refreshTokenPrivate";
 
 export type TJwtPublicTokenType = "accessTokenPublic" | "refreshTokenPublic";
 
-export const singJWT = (
+export const signJWT = (
   data: Object,
   key: TJwtPrivateTokenType,
   options?: jwt.SignOptions
