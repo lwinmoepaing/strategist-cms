@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
+import { errorLogger } from "./logger";
 
 let swaggerObjects = {
   paths: {},
@@ -38,7 +39,9 @@ async function itrateApiDocs(directory: string) {
           };
         }
       } catch (error: any) {
-        console.error(`Error processing file ${filePath}: ${error.message}`);
+        errorLogger.error(
+          `Error processing file ${filePath}: ${error.message}`,
+        );
       }
     }
   }
@@ -46,7 +49,7 @@ async function itrateApiDocs(directory: string) {
 
 async function generateApi() {
   const rootFolder = path.join(__dirname, "../", "features"); // Change this to your actual root folder
-  
+
   const isProduction = process.env.NODE_ENV === "production";
   if (isProduction) {
     await itrateApiDocs(rootFolder);

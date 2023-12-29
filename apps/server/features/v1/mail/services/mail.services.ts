@@ -1,6 +1,6 @@
 import nodemailer, { SendMailOptions } from "nodemailer";
 import serverConfig from "../../../../config/server.config";
-import { generalLogger } from "../../../../lib/logger";
+import { errorLogger } from "../../../../lib/logger";
 
 export const createTestEmailFromEtheral = async () => {
   // For Creating New Testing Email
@@ -37,7 +37,7 @@ export const sendEmail = async (payload: SendMailOptions) => {
         pass: password,
       },
     });
-    
+
     console.log("serverConfig.emailOptions", serverConfig.emailOptions);
     const info = await transporter.sendMail(payload);
     const messageId = info.messageId;
@@ -46,6 +46,6 @@ export const sendEmail = async (payload: SendMailOptions) => {
   } catch (err) {
     const message = err instanceof Error ? err.message : "Something went wrong";
     const stack = err instanceof Error ? err.stack : "";
-    generalLogger.info(`Email Error: ${message}`, { stack });
+    errorLogger.info(`Email Error: ${message}`, { stack });
   }
 };

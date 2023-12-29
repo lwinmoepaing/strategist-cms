@@ -1,9 +1,9 @@
 import { Response } from "express";
-import { ZodError } from "zod";
 import { StatusCodes } from "http-status-codes";
-import { generalLogger } from "../lib/logger";
 import { Error as MongooseError } from "mongoose";
+import { ZodError } from "zod";
 import { TokenAccessError } from "../features/v1/auth/middleware/auth.middleware";
+import { errorLogger } from "../lib/logger";
 
 export const successResponse = <T>(
   res: Response,
@@ -35,7 +35,7 @@ export const errorResponse = <T>(
 
 export const errorHandler = (error: unknown, res: Response) => {
   if (error instanceof Error) {
-    generalLogger.error(`Error: ${error?.message || ""}`, {
+    errorLogger.error(`Error: ${error?.message || ""}`, {
       stack: error.stack,
     });
   }

@@ -186,7 +186,9 @@ export const createUserSessionHandler = async (
     const accessToken = signAccessToken(user);
 
     // Sign Refresh Token
-    const refreshToken = await signRefreshToken({ userId: user._id.toString() });
+    const refreshToken = await signRefreshToken({
+      userId: user._id.toString(),
+    });
 
     // Send Tokens
     return successResponse(res, StatusCodes.OK, "Successfully signed ", {
@@ -215,7 +217,7 @@ export const refreshAccessTokenHandler = async (
   req: Request,
   res: Response,
 ) => {
-  const refreshToken = get(req.headers, "x-refresh") as string || "";
+  const refreshToken = (get(req.headers, "x-refresh") as string) || "";
   const decoded = verifyJwt<{ session: string }>(
     refreshToken,
     "refreshTokenPublic",

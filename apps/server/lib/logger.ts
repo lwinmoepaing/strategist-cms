@@ -21,7 +21,7 @@ if (!winston.transports.MongoDB) {
 const generalLogger = winston.createLogger({
   format: winston.format.combine(
     winston.format.timestamp(),
-    winston.format.json()
+    winston.format.json(),
   ),
   transports: [
     new winstonDailyRotateFile({
@@ -37,7 +37,7 @@ const generalLogger = winston.createLogger({
 const requestLogger = winston.createLogger({
   format: winston.format.combine(
     winston.format.timestamp(),
-    winston.format.json()
+    winston.format.json(),
   ),
   transports: [
     new winstonDailyRotateFile({
@@ -53,7 +53,7 @@ const requestLogger = winston.createLogger({
 const mongoDbErrorLogger = winston.createLogger({
   format: winston.format.combine(
     winston.format.timestamp(),
-    winston.format.json()
+    winston.format.json(),
   ),
   transports: [
     new winstonDailyRotateFile({
@@ -71,4 +71,20 @@ const mongoDbErrorLogger = winston.createLogger({
   ],
 });
 
-export { generalLogger, requestLogger, mongoDbErrorLogger };
+const errorLogger = winston.createLogger({
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json(),
+  ),
+  transports: [
+    new winstonDailyRotateFile({
+      filename: path.join(logsDir, "error", "error-%DATE%.log"),
+      datePattern: "YYYY-MM-DD",
+      zippedArchive: true,
+      maxSize: "20m",
+      maxFiles: "14d",
+    }),
+  ],
+});
+
+export { generalLogger, requestLogger, mongoDbErrorLogger, errorLogger };

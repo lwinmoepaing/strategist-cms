@@ -7,7 +7,7 @@ import { initFileRouter } from "node-file-router";
 import path from "path";
 import { dbConnect } from "./lib/dbConnect";
 import { deserializeUser } from "./lib/deserializeUser";
-import { generalLogger, requestLogger } from "./lib/logger";
+import { errorLogger, requestLogger } from "./lib/logger";
 import swaggerApi from "./lib/swaggerApi";
 import { successResponse } from "./util/response";
 
@@ -119,7 +119,7 @@ const startServer = async () => {
    */
   // eslint-disable-next-line no-unused-vars
   app.use((err: any, req: Request, res: Response, _next: NextFunction) => {
-    generalLogger.error(`Error: ${err?.message || ""}`, { stack: err.stack });
+    errorLogger.error(`Error: ${err?.message || ""}`, { stack: err.stack });
     successResponse(res, 500, "Internal Server Error");
   });
 
